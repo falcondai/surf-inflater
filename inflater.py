@@ -20,10 +20,10 @@ class MyModel(HasTraits):
     def __init__(self, base_path, clut_name=None):
         super(HasTraits, self).__init__()
         self.base_path = base_path
-        pial_path = base_path + '/surf/lh.pial'
-        inflated_path = base_path + '/surf/lh.inflated'
-        sphere_path = base_path + '/surf/lh.sphere'
-        annot_path = base_path + '/label/lh.aparc.a2009s.annot'
+        pial_path = os.path.join(base_path, 'surf/lh.pial')
+        inflated_path = os.path.join(base_path, 'surf/lh.inflated')
+        sphere_path = os.path.join(base_path, 'surf/lh.sphere')
+        annot_path = os.path.join(base_path, 'label/lh.aparc.a2009s.annot')
         self.pial, self.faces = nibabel.freesurfer.read_geometry(pial_path)
         self.inflated = nibabel.freesurfer.read_geometry(inflated_path)
         self.sphere = nibabel.freesurfer.read_geometry(sphere_path)
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                         default=os.environ['SUBJECTS_DIR'] if 'SUBJECTS_DIR' in os.environ else '/usr/local/freesurfer/subjects')
     args = parser.parse_args()
 
-    base_path = '%s/%s' % (args.subjects_dir, args.subject)
+    base_path = os.path.join(args.subjects_dir, args.subject)
 
     my_model = MyModel(base_path, args.clut)
     my_model.configure_traits()
