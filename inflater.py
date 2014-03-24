@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from traits.api import HasTraits, Range, Instance, on_trait_change
 from traitsui.api import View, Item, Group
