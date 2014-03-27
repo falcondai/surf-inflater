@@ -17,13 +17,13 @@ class MyModel(HasTraits):
     scene = Instance(MlabSceneModel, ())
     plot = Instance(PipelineBase)
 
-    def __init__(self, base_path, clut_name=None):
+    def __init__(self, base_path, hemisphere, clut_name=None):
         super(HasTraits, self).__init__()
         self.base_path = base_path
-        pial_path = os.path.join(base_path, 'surf/lh.pial')
-        inflated_path = os.path.join(base_path, 'surf/lh.inflated')
-        sphere_path = os.path.join(base_path, 'surf/lh.sphere')
-        annot_path = os.path.join(base_path, 'label/lh.aparc.a2009s.annot')
+        pial_path = os.path.join(base_path, 'surf/%s.pial' % hemisphere)
+        inflated_path = os.path.join(base_path, 'surf/%s.inflated' % hemisphere)
+        sphere_path = os.path.join(base_path, 'surf/%s.sphere' % hemisphere)
+        annot_path = os.path.join(base_path, 'label/%s.aparc.a2009s.annot' % hemisphere)
         self.pial, self.faces = nibabel.freesurfer.read_geometry(pial_path)
         self.inflated = nibabel.freesurfer.read_geometry(inflated_path)
         self.sphere = nibabel.freesurfer.read_geometry(sphere_path)
@@ -68,6 +68,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('subject', nargs='?', help='the subject\'s id', default='fsaverage')
+    parser.add_argument('hemisphere', nargs='?', help='which hemisphere', choices=['lh', 'rh'], default='lh')
     parser.add_argument('-c', '--clut', help='color LUT name', choices=['Accent', 'Blues', 'BrBG', 'BuGn', 'BuPu', 'Dark2', 'GnBu', 'Greens', 'Greys', 'OrRd', 'Oranges', 'PRGn', 'Paired', 'Pastel1', 'Pastel2', 'PiYG', 'PuBu', 'PuBuGn', 'PuOr', 'PuRd', 'Purples', 'RdBu', 'RdGy', 'RdPu', 'RdYlBu', 'RdYlGn', 'Reds', 'Set1', 'Set2', 'Set3', 'Spectral', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd', 'autumn', 'binary', 'black-white', 'blue-red', 'bone', 'cool', 'copper', 'file', 'flag', 'gist_earth', 'gist_gray', 'gist_heat', 'gist_ncar', 'gist_rainbow', 'gist_stern', 'gist_yarg', 'gray', 'hot', 'hsv', 'jet', 'pink', 'prism', 'spectral', 'spring', 'summer', 'winter'])
     # use the suggested path in Freesurfer documentation
     parser.add_argument('-s', '--subjects_dir', help='path to subjects directory, overrides $SUBJECTS_DIR', 
@@ -76,5 +77,5 @@ if __name__ == '__main__':
 
     base_path = os.path.join(args.subjects_dir, args.subject)
 
-    my_model = MyModel(base_path, args.clut)
+    my_model = MyModel(base_path, args.hemisphere, args.clut)
     my_model.configure_traits()
