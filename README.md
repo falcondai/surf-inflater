@@ -11,6 +11,13 @@ example
 -------
 `$ ./inflater.py -c Accent`
 
+dependency
+----------
+- nibabel
+- mayavi
+
+You can install them with `$ pip install -r requirements.txt`
+
 license
 -------
 MIT License
